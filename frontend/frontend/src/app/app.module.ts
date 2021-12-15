@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { PublicKeyComponent } from './components/public-key/public-key.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EventLogComponent } from './components/event-log/event-log/event-log.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PublicKeyComponent
+    PublicKeyComponent,
+    EventLogComponent
   ],
   imports: [
     CommonModule,

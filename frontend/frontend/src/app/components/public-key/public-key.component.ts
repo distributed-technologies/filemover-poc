@@ -4,6 +4,7 @@ import { Observable, throwError, timer } from 'rxjs';
 import { PublicKey } from 'src/app/models/public-key.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { mergeMap } from 'rxjs/operators';
+import { EventLogService } from 'src/app/core/services/event-log/event-log.service';
 
 @Component({
   selector: 'app-public-key',
@@ -15,7 +16,7 @@ export class PublicKeyComponent implements OnInit {
   private intervalSec = 1000;
 
   public deletingPublicKey: boolean = false;
-  public publicKeys: Observable<PublicKey[]>;
+  public publicKeys: Observable<PublicKey[]> | undefined;
   public publicKeyForm: FormGroup = new FormGroup({
       name: new FormControl('', Validators.required),
       group: new FormControl('', Validators.required),

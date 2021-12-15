@@ -1,42 +1,39 @@
-
-<div class="container">
-  <div class="row"></div>
-  <div class="row mt-5">
-    <!-- Upload public key -->
-    <div class="col-6">
-      <form [formGroup]="publicKeyForm" class="row" (ngSubmit)="createPublicKey()">
-        <div class="row">
-          <label for="name">Name: </label>
-          <input type="text" id="name" formControlName="name">
-        </div>
-        <div class="row">
-          <label for="group">Group: </label>
-          <input type="text" id="group" formControlName="group">
-        </div>
-        <div class="row">
-          <label for="key">Public key: </label>
-          <textarea type="text" id="key" formControlName="key"></textarea>
-        </div>
-        <div class="row">
-          <button type="submit" [disabled]="!publicKeyForm.valid">Create Public Key</button>
-        </div>
-      </form>
-    </div>
-    <!-- Public key list -->
-    <div class="col-6">
+<div class="row mt-5 h-50">
+  <!-- Upload public key -->
+  <div class="col-6">
+    <form [formGroup]="publicKeyForm" class="row" (ngSubmit)="createPublicKey()">
       <div class="row">
-        <p class="col-3"> Public Key ID </p>
-        <div class="col-3"> Name </div>
-        <div class="col-3"> Group </div>
+        <label for="name">Name: </label>
+        <input type="text" id="name" formControlName="name">
       </div>
-      <div class="row" *ngFor="let publicKey of publicKeys | async">
-        <div class="col-3 border "> {{ publicKey.keyId }} </div>
-        <div class="col-3 border"> {{ publicKey.name }} </div>
-        <div class="col-3 border"> {{ publicKey.group }} </div>
-        <button class="col-2" (click)="deletePublicKey(publicKey)">
-          delete
-        </button>
+      <div class="row">
+        <label for="group">Group: </label>
+        <input type="text" id="group" formControlName="group">
       </div>
+      <div class="row">
+        <label for="key">Public key: </label>
+        <textarea type="text" id="key" formControlName="key"></textarea>
+      </div>
+      <div class="row">
+        <button type="submit" [disabled]="!publicKeyForm.valid">Create Public Key</button>
+      </div>
+    </form>
+  </div>
+  <!-- Public key list -->
+  <div class="col-6">
+    <div class="row">
+      <p class="col-3"> Public Key ID </p>
+      <div class="col-3"> Name </div>
+      <div class="col-3"> Group </div>
+    </div>
+    <div class="row" *ngFor="let publicKey of publicKeys | async">
+      <div class="col-3 border "> {{ publicKey.keyId }} </div>
+      <div class="col-3 border"> {{ publicKey.name }} </div>
+      <div class="col-3 border"> {{ publicKey.group }} </div>
+      <button class="col-2" (click)="deletePublicKey(publicKey)">
+        delete
+      </button>
     </div>
   </div>
 </div>
+
