@@ -155,11 +155,10 @@ func mover() {
 
 		for file, signatures := range signedFiles {
 			groups := []string{}
-			file = fmt.Sprintf("%s/%s", input, file)
 
 			for _, sig := range signatures {
 				sig = fmt.Sprintf("%s/%s", input, sig)
-				entity, err := checkSignature(file, sig)
+				entity, err := checkSignature(fmt.Sprintf("%s/%s", input, file), sig)
 				if err != nil {
 					log.Print("Error checking signature " + err.Error())
 					continue
@@ -178,7 +177,7 @@ func mover() {
 			}
 			if len(groups) > 1 {
 				log.Println(fmt.Sprintf("%s signed by two groups, moving...", file))
-				os.Rename(file, fmt.Sprintf("%s/%s", output, file))
+				os.Rename(fmt.Sprintf("%s/%s", input, file), fmt.Sprintf("%s/%s", output, file))
 				for _, file := range signatures {
 					os.Rename(fmt.Sprintf("%s/%s", input, file), fmt.Sprintf("%s/%s", output, file))
 				}
