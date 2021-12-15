@@ -199,5 +199,5 @@ func main() {
 	r.HandleFunc("/keys", addKey).Methods("POST")
 	r.HandleFunc("/keys/{keyId}", deleteKey).Methods("DELETE")
 	log.Print("Listening on " + addr)
-	log.Fatal(http.ListenAndServe(addr, handlers.CORS(handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "DELETE"}))(r)))
+	log.Fatal(http.ListenAndServe(addr, handlers.CORS(handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "DELETE"}), handlers.AllowedHeaders([]string{"Content-Type"}))(r)))
 }
