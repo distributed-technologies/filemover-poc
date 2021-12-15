@@ -23,6 +23,15 @@ $ curl -s 127.0.0.1:8080/keys | jq .
 ]
 ```
 
+### Eventlog
+
+```sh
+$ curl http://127.0.0.1:8080/keys/log
+2021-12-15T14:58:15+01:00 Added key: KeyId=61B7B526D98F0353,Name=John Doe,Group=Employe
+2021-12-15T14:58:36+01:00 Moved file Hello.txt signed by [KeyId=61B7B526D98F0353,Name=John Doe,Group=Employe KeyId=xx,Name=xx,Group=xx]
+2021-12-15T15:02:40+01:00 Deleted key: KeyId=61B7B526D98F0353,Name=John Doe,Group=Employe
+```
+
 ### Add key
 
 ```sh

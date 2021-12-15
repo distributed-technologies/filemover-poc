@@ -25,18 +25,24 @@ type key struct {
 }
 
 var (
-	keys    map[string]key
-	keysMu  sync.Mutex
-	keyRing openpgp.KeyRing
-	addr    string
-	input   string
-	output  string
+	keys       map[string]key
+	keysMu     sync.Mutex
+	keyRing    openpgp.KeyRing
+	addr       string
+	input      string
+	output     string
+	eventLogMu sync.Mutex
+	eventLog   []string
 )
 
 func init() {
 	flag.StringVar(&addr, "addr", "127.0.0.1:8080", "address to listen on")
 	flag.StringVar(&input, "input", "", "")
 	flag.StringVar(&output, "output", "", "")
+}
+
+func (k key) String() string {
+	return fmt.Sprintf("KeyId=%s,Name=%s,Group=%s", k.KeyId, k.Name, k.Group)
 }
 
 func getKeys(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +57,21 @@ func getKeys(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(values); err != nil {
 		http.Error(w, "Error encoding response object", http.StatusInternalServerError)
 	}
+}
+
+func getLog(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain")
+	eventLogMu.Lock()
+	for _, line := range eventLog {
+		fmt.Fprintf(w, "%s\n", line)
+	}
+	eventLogMu.Unlock()
+}
+
+func logEvent(line string) {
+	eventLogMu.Lock()
+	eventLog = append(eventLog, fmt.Sprintf("%s %s", time.Now().Format(time.RFC3339), line))
+	eventLogMu.Unlock()
 }
 
 func addKey(w http.ResponseWriter, r *http.Request) {
@@ -89,6 +110,7 @@ func addKey(w http.ResponseWriter, r *http.Request) {
 		el = append(el, &val.Key)
 	}
 	keyRing = el
+	logEvent(fmt.Sprintf("Added key: %s", keys[keyId]))
 	keysMu.Unlock()
 }
 
@@ -96,8 +118,11 @@ func deleteKey(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	if _, ok := keys[vars["keyId"]]; ok {
 		keysMu.Lock()
+		key := keys[vars["keyId"]]
 		delete(keys, vars["keyId"])
+		logEvent(fmt.Sprintf("Deleted key: %s", key))
 		keysMu.Unlock()
+
 	} else {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 	}
@@ -155,6 +180,7 @@ func mover() {
 
 		for file, signatures := range signedFiles {
 			groups := []string{}
+			signedBy := []key{}
 
 			for _, sig := range signatures {
 				sig = fmt.Sprintf("%s/%s", input, sig)
@@ -164,6 +190,7 @@ func mover() {
 					continue
 				}
 				keyId := entity.PrimaryKey.KeyIdString()
+				signedBy = append(signedBy, keys[keyId])
 				group := keys[keyId].Group
 				add := true
 				for _, g := range groups {
@@ -181,6 +208,7 @@ func mover() {
 				for _, file := range signatures {
 					os.Rename(fmt.Sprintf("%s/%s", input, file), fmt.Sprintf("%s/%s", output, file))
 				}
+				logEvent(fmt.Sprintf("Moved file %s signed by %v", file, signedBy))
 			}
 		}
 		time.Sleep(2 * time.Second)
@@ -195,6 +223,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/keys", getKeys).Methods("GET")
+	r.HandleFunc("/keys/log", getLog).Methods("GET")
 	r.HandleFunc("/keys", addKey).Methods("POST")
 	r.HandleFunc("/keys/{keyId}", deleteKey).Methods("DELETE")
 	log.Print("Listening on " + addr)
