@@ -18,7 +18,24 @@ export class EventLogService {
     return timer(0,this.intervalSec)
       .pipe(
         mergeMap(() => this.http.get(this.host, {responseType: 'text'})),
-        tap(console.log),
+        map((events: string) => {
+          const lines = events.split("\n");
+          const mappable_lines = lines.slice(0, lines.length - 1)
+          let event_list = mappable_lines.map(log => {
+            console.log(log.split(" ")[0])
+            let date = new Date(log.split(" ")[0])
+            let date_string = date.toLocaleDateString() + " - " + date.toLocaleTimeString()
+            let info_string = log.split(" ").slice(1).toString();
+            console.log("here")
+            console.log(info_string)
+            info_string = info_string.replace(new RegExp(",", 'g'),' | ')
+            info_string = info_string.replace(new RegExp("=", 'g'),': ')
+            console.log(info_string)
+            return date_string + " - " + info_string
+          })
+          return event_list.join("\n")
+
+        }),
         catchError(this.handleError)
       )
   }
