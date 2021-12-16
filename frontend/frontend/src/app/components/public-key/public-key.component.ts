@@ -30,9 +30,12 @@ export class PublicKeyComponent implements OnInit {
   }
 
   public deletePublicKey(publicKey: PublicKey) {
-    this.deletingPublicKey = true
-    return this.publicKeyService.deletePublicKey(publicKey)
-    .then(() => this.deletingPublicKey = false)
+    if(confirm("Er du sikker på at du vil slett denne bruger?")){
+      this.deletingPublicKey = true
+      return this.publicKeyService.deletePublicKey(publicKey)
+        .then(() => this.deletingPublicKey = false)
+    }
+    return
   }
 
   public createPublicKey(){
