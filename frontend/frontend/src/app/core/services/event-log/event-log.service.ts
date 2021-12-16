@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, timer } from 'rxjs';
-import { mergeMap, catchError, tap } from 'rxjs/operators';
+import { mergeMap, catchError, tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

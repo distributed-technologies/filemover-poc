@@ -28,6 +28,7 @@ export class PublicKeyService {
               key: undefined
               })
             )),
+            map((keys: PublicKey[]) => keys.sort((a,b) => a.name.localeCompare(b.name))),
             catchError(this.handleError)
           ).toPromise() as Promise<PublicKey[]>
   }
