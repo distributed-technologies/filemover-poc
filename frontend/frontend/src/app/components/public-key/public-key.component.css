@@ -1,0 +1,16 @@
+label {
+  padding: 0px;
+  position: relative;
+  height: 1.5em;
+  margin-top: auto;
+}
+
+.row {
+  position: relative;
+  margin-bottom: 1em;
+  margin-top: 0;
+}
+
+.public-key{
+  height: 10em;
+}

@@ -1,7 +1,7 @@
 <div class="row mt-5 h-50">
   <!-- Upload public key -->
   <div class="col-6">
-    <form [formGroup]="publicKeyForm" class="row" (ngSubmit)="createPublicKey()">
+    <form [formGroup]="publicKeyForm" class="row h-75" (ngSubmit)="createPublicKey()">
       <div class="row">
         <label for="name">Name: </label>
         <input type="text" id="name" formControlName="name">
@@ -10,12 +10,12 @@
         <label for="group">Group: </label>
         <input type="text" id="group" formControlName="group">
       </div>
-      <div class="row">
+      <div class="row public-key">
         <label for="key">Public key: </label>
-        <textarea type="text" id="key" formControlName="key"></textarea>
+        <textarea class="h-75" type="text" id="key" formControlName="key"></textarea>
       </div>
       <div class="row">
-        <button type="submit" [disabled]="!publicKeyForm.valid">Create Public Key</button>
+        <button type="submit" class="btn btn-secondary" [disabled]="!publicKeyForm.valid">Add User to keychain</button>
       </div>
     </form>
   </div>
@@ -30,7 +30,7 @@
       <div class="col-3 border "> {{ publicKey.keyId }} </div>
       <div class="col-3 border"> {{ publicKey.name }} </div>
       <div class="col-3 border"> {{ publicKey.group }} </div>
-      <button class="col-2" (click)="deletePublicKey(publicKey)">
+      <button class="col-2 btn btn-danger" (click)="deletePublicKey(publicKey)">
         delete
       </button>
     </div>
