@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { PublicKey } from 'src/app/models/public-key.model';
 import { Observable, throwError, timer } from 'rxjs';
 import { catchError, map, switchMap, tap,take } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { JSONPublicKey } from 'src/app/models/json-public-key.model';
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PublicKeyService {
   private host: string;
 
   constructor(private http: HttpClient) {
-    this.host = "http://10.178.16.140:8080/keys";
+    this.host = environment.publicKeyBackendURL;
   }
 
   public getPublicKeys(): Promise<PublicKey[]>{
