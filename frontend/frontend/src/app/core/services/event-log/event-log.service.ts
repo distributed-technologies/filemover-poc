@@ -9,14 +9,13 @@ import { environment } from 'src/environments/environment';
 })
 export class EventLogService {
   private host: string;
-  private intervalSec: number = 2000;
 
   constructor(private http: HttpClient) {
     this.host = environment.eventLogBackendURL;
   }
 
   public getLog(): Observable<string> {
-    return timer(0,this.intervalSec)
+    return timer(0, environment.pullIntervalSec * 1000)
       .pipe(
         mergeMap(() => this.http.get(this.host, {responseType: 'text'})),
         map((events: string) => {

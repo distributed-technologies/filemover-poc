@@ -4,7 +4,7 @@ import { Observable, throwError, timer } from 'rxjs';
 import { PublicKey } from 'src/app/models/public-key.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { mergeMap } from 'rxjs/operators';
-import { EventLogService } from 'src/app/core/services/event-log/event-log.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-public-key',
@@ -12,9 +12,6 @@ import { EventLogService } from 'src/app/core/services/event-log/event-log.servi
   styleUrls: ['./public-key.component.css']
 })
 export class PublicKeyComponent implements OnInit {
-
-  private intervalSec = 1000;
-
   public formError = false;
   public errorMsg = "";
   public deletingPublicKey: boolean = false;
@@ -28,7 +25,7 @@ export class PublicKeyComponent implements OnInit {
   constructor(private publicKeyService: PublicKeyService) { }
 
   ngOnInit(): void {
-    this.publicKeys = this.createPublicKeyObservable(this.intervalSec)
+    this.publicKeys = this.createPublicKeyObservable(environment.pullIntervalSec * 1000)
   }
 
   public deletePublicKey(publicKey: PublicKey) {

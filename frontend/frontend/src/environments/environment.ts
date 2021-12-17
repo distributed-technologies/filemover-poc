@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   publicKeyBackendURL: "",
-  eventLogBackendURL: ""
+  eventLogBackendURL: "",
+  pullIntervalSec: 2
 };
 
 /*
