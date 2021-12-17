@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PublicKey } from 'src/app/models/public-key.model';
-import { Observable, throwError, timer } from 'rxjs';
-import { catchError, map, switchMap, tap,take } from 'rxjs/operators';
+import { throwError  } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { JSONPublicKey } from 'src/app/models/json-public-key.model';
 import { environment } from 'src/environments/environment'
@@ -35,7 +35,6 @@ export class PublicKeyService {
   }
 
   private handleError(err: HttpErrorResponse){
-    console.log(err.status)
     let errorMsg: string;
     switch (err.status) {
       case 422: 
@@ -49,8 +48,6 @@ export class PublicKeyService {
   }
 
   public postPublicKey(publicKey: PublicKey): Promise<Object | undefined> {
-    console.log(publicKey);
-
     return this.http.post(this.host, publicKey)
       .pipe(
         take(1),
@@ -59,7 +56,6 @@ export class PublicKeyService {
   }
 
   public deletePublicKey(publicKey: PublicKey): Promise<Object | undefined>{
-    console.log(this.host + "/" + publicKey.keyId);
     return this.http.delete(this.host + "/" + publicKey.keyId)
       .pipe(
         take(1),
