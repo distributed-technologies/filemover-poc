@@ -107,7 +107,8 @@ func addKey(w http.ResponseWriter, r *http.Request) {
 
 	var el openpgp.EntityList
 	for _, val := range keys {
-		el = append(el, &val.Key)
+		key := val.Key
+		el = append(el, &key)
 	}
 	keyRing = el
 	logEvent(fmt.Sprintf("Added key: %s", keys[keyId]))
