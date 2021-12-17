@@ -17,19 +17,24 @@
       <div class="row">
         <button type="submit" class="btn btn-secondary" [disabled]="!publicKeyForm.valid">Add User to keychain</button>
       </div>
+      <div class="row">
+        <div class="alert alert-danger" role="alert" *ngIf="formError">
+          An error occured while creating user: {{ this.errorMsg }}
+        </div>
+      </div>
     </form>
   </div>
   <!-- Public key list -->
   <div class="col-6">
-    <div class="row">
-      <p class="col-3"> Public Key ID </p>
-      <div class="col-3"> Name </div>
-      <div class="col-3"> Group </div>
+    <div class="row mb-0">
+      <label class="col-5"> Public Key ID </label>
+      <label class="col-2"> Name </label>
+      <label class="col-2"> Group </label>
     </div>
     <div class="row" *ngFor="let publicKey of publicKeys | async">
-      <div class="col-3 border "> {{ publicKey.keyId }} </div>
-      <div class="col-3 border"> {{ publicKey.name }} </div>
-      <div class="col-3 border"> {{ publicKey.group }} </div>
+      <div class="col-5 border tb"> {{ publicKey.keyId }} </div>
+      <div class="col-2 border tb"> {{ publicKey.name }} </div>
+      <div class="col-2 border tb"> {{ publicKey.group }} </div>
       <button class="col-2 btn btn-danger" (click)="deletePublicKey(publicKey)">
         delete
       </button>

@@ -33,9 +33,18 @@ export class PublicKeyService {
           ).toPromise() as Promise<PublicKey[]>
   }
 
-  private handleError(error: string){
-    console.log(error)
-    return throwError('Something bad happened; please try again later.');
+  private handleError(err: HttpErrorResponse){
+    console.log(err.status)
+    let errorMsg: string;
+    switch (err.status) {
+      case 422: 
+        errorMsg = "The request was malformed."
+        break;
+    
+      default: errorMsg = "Something bad happened."
+        break;
+    }
+    return throwError(errorMsg);
   }
 
   public postPublicKey(publicKey: PublicKey): Promise<Object | undefined> {

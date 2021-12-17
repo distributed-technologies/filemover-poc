@@ -15,6 +15,8 @@ export class PublicKeyComponent implements OnInit {
 
   private intervalSec = 1000;
 
+  public formError = false;
+  public errorMsg = "";
   public deletingPublicKey: boolean = false;
   public publicKeys: Observable<PublicKey[]> | undefined;
   public publicKeyForm: FormGroup = new FormGroup({
@@ -39,8 +41,14 @@ export class PublicKeyComponent implements OnInit {
   }
 
   public createPublicKey(){
-    console.log(this.publicKeyForm.value);
     return this.publicKeyService.postPublicKey(this.publicKeyForm.value)
+      .then(() => {
+        this.formError = false
+      })
+      .catch(err => {
+        this.formError = true
+        this.errorMsg = err;
+      })
   }
 
   private createPublicKeyObservable(intervalSec: number): Observable<PublicKey[]> {

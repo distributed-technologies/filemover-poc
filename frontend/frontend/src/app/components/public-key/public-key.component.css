@@ -3,6 +3,7 @@ label {
   position: relative;
   height: 1.5em;
   margin-top: auto;
+  font-weight: bold;
 }
 
 .row {
@@ -13,4 +14,8 @@ label {
 
 .public-key{
   height: 10em;
+}
+
+.tb {
+  text-align: center;
 }
