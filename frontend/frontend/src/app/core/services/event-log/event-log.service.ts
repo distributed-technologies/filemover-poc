@@ -18,20 +18,7 @@ export class EventLogService {
     return timer(0, environment.pullIntervalSec * 1000)
       .pipe(
         mergeMap(() => this.http.get(this.host, {responseType: 'text'})),
-        map((events: string) => {
-          const lines = events.split("\n");
-          const mappable_lines = lines.slice(0, lines.length - 1)
-          let event_list = mappable_lines.map(log => {
-            let date = new Date(log.split(" ")[0])
-            let date_string = date.toLocaleDateString() + " - " + date.toLocaleTimeString()
-            let info_string = log.split(" ").slice(1).toString();
-            info_string = info_string.replace(new RegExp(",", 'g'),' ')
-            info_string = info_string.replace(new RegExp("=", 'g'),': ')
-            return date_string + " - " + info_string
-          })
-          return event_list.join("\n")
-
-        }),
+        map(this.formatLogString),
         catchError(this.handleError)
       )
   }
@@ -39,5 +26,19 @@ export class EventLogService {
   private handleError(error: string){
     console.log(error)
     return throwError('Something bad happened; please try again later.');
+  }
+
+  private formatLogString(logString: string): string{
+    const lines = logString.split("\n");
+    const mappable_lines = lines.slice(0, lines.length - 1)
+    let event_list = mappable_lines.map(log => {
+      let date = new Date(log.split(" ")[0])
+      let date_string = date.toLocaleDateString() + " - " + date.toLocaleTimeString()
+      let info_string = log.split(" ").slice(1).toString();
+      info_string = info_string.replace(new RegExp(",", 'g'),' ')
+      info_string = info_string.replace(new RegExp("=", 'g'),': ')
+      return date_string + " - " + info_string
+    })
+    return event_list.join("\n")
   }
 }
