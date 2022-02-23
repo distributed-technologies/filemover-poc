@@ -1,0 +1,44 @@
+<div class="row mt-5 h-50">
+  <!-- Upload public key -->
+  <div class="col-6">
+    <form [formGroup]="publicKeyForm" class="row h-75" (ngSubmit)="createPublicKey()">
+      <div class="row">
+        <label for="name">Name: </label>
+        <input type="text" id="name" formControlName="name">
+      </div>
+      <div class="row">
+        <label for="group">Group: </label>
+        <input type="text" id="group" formControlName="group">
+      </div>
+      <div class="row public-key">
+        <label for="key">Public key: </label>
+        <textarea class="h-75" type="text" id="key" formControlName="key"></textarea>
+      </div>
+      <div class="row">
+        <button type="submit" class="btn btn-secondary" [disabled]="!publicKeyForm.valid">Add User to keychain</button>
+      </div>
+      <div class="row">
+        <div class="alert alert-danger" role="alert" *ngIf="formError">
+          An error occured while creating user: {{ this.errorMsg }}
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Public key list -->
+  <div class="col-6">
+    <div class="row mb-0">
+      <label class="col-5"> Public Key ID </label>
+      <label class="col-2"> Name </label>
+      <label class="col-2"> Group </label>
+    </div>
+    <div class="row" *ngFor="let publicKey of publicKeys | async">
+      <div class="col-5 border tb"> {{ publicKey.keyId }} </div>
+      <div class="col-2 border tb"> {{ publicKey.name }} </div>
+      <div class="col-2 border tb"> {{ publicKey.group }} </div>
+      <button class="col-2 btn btn-danger" (click)="deletePublicKey(publicKey)">
+        delete
+      </button>
+    </div>
+  </div>
+</div>
+

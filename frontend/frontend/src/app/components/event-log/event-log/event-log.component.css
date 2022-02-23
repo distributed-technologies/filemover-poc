@@ -1,0 +1,5 @@
+.log {
+  white-space: pre-line;
+  height: 20%;
+  overflow: scroll;
+}
